@@ -29,13 +29,10 @@ const database = require("./database");
 
 const getMovies = (req, res) => {
   database
-
     .query("select * from movies")
-
     .then(([movies]) => {
       res.json(movies);
     })
-
     .catch((err) => {
       console.error(err);
 
@@ -63,14 +60,6 @@ const getMovieById = (req, res) => {
       res.status(500).send("Error retrieving data from database");
     });
 };
-
-const movie = movies.find((movie) => movie.id === id);
-
-if (movie != null) {
-  res.json(movie);
-} else {
-  res.status(404).send("Not Found");
-}
 
 module.exports = {
   getMovies,

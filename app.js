@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const database = require("./database");
 
 const app = express();
 
@@ -23,4 +24,30 @@ app.listen(port, (err) => {
   } else {
     console.log(`Server is listening on ${port}`);
   }
+});
+
+// 1ere étape de la quête Express 02 - Créer une route GET /api/users
+app.get("/api/users", (req, res) => {
+  database
+    .query("select * from users")
+    .then(([users]) => {
+      res.json(users);
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(404).send("Not Found");
+    });
+});
+
+// 2eme étape de la quête Express 02 - Créer une route GET /api/users/:id
+app.get("/api/users/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  database.query("select * from users where id = ?", [id]).then(([users]) => {
+    if (users[0] != null) {
+      res.json(users[0]);
+    } else {
+      res.status(404).send("Not Found");
+    }
+  });
 });
